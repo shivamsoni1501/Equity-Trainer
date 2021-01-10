@@ -1,6 +1,6 @@
-# hello_world
+# Equity Manager
 
-A new Flutter project.
+A Flutter based Application for trying out Equity Exchange with tocken money.
 
 ## Getting Started
 
