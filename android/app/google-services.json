@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "123170148656",
+    "project_id": "civil-willow-293605",
+    "storage_bucket": "civil-willow-293605.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123170148656:android:9d18e2abcc4e59ed3338f5",
+        "android_client_info": {
+          "package_name": "com.sks.hello_world"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123170148656-197it4vaa4a0473kbcg48b4smqgs9mbn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkw2jQLDuqBXm_zG6idCypKICuI-hRMIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "123170148656-197it4vaa4a0473kbcg48b4smqgs9mbn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
