@@ -12,4 +12,8 @@ Flutter SDK is needed to run the project.
 
 Users can register the on the application with Email Id and Password with the name and number(Not necessarily valid)
 
+    ![register screen](./images/register.jpg?raw=true "Title")
+
 Or if already created one then just Log-In into the application.
+
+    ![login screen](./images/login.jpg?raw=true "Title")

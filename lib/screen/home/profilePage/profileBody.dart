@@ -161,7 +161,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.pink,
                       ),
                       TextFormField(
-                        enabled: readOn,
+                        enabled: false,
                         controller: controllerE,
                         cursorColor: Colors.pinkAccent,
                         keyboardType: TextInputType.emailAddress,
@@ -170,14 +170,6 @@ class _ProfilePageState extends State<ProfilePage> {
                             letterSpacing: 2,
                             fontWeight: FontWeight.bold),
                         decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.pink, width: 2)),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(40.0),
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade400)),
-                          // border: null,
                           prefixIcon: Icon(
                             Icons.email,
                             color: Colors.pink,
