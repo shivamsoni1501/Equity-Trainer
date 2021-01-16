@@ -16,4 +16,4 @@ Users can register the on the application with Email Id and Password with the na
 
 Or if already created one then just Log-In into the application.
 
-   ![login screen]('images/login.jpg')
+   ![login screen](./images/login.jpg?raw=true "Title")
