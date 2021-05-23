@@ -110,6 +110,7 @@ class _AlertBoxState extends State<AlertBox> {
                 )
               : Text(
                   error,
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.red[900], fontSize: 12),
                 )
         ],
@@ -150,7 +151,8 @@ class _AlertBoxState extends State<AlertBox> {
                       LocalUser.tocken += total;
                       LocalUser.stocks[stockId]['count'] -= val;
                       LocalUser.stocks[stockId]['totalSell'] += total;
-                      LocalUser.history[stockId].add({
+                      LocalUser.history.add({
+                        'stockId': stockId,
                         'time': DateTime.now().toString(),
                         'price': price.toString(),
                         'isSell': true.toString(),
@@ -159,6 +161,7 @@ class _AlertBoxState extends State<AlertBox> {
 
                       try {
                         //trying to update ServerData
+                        print(LocalUser.history.length);
                         await DatabaseService().updateDatabase();
                         Navigator.pop(context);
                       } catch (e) {
@@ -166,11 +169,11 @@ class _AlertBoxState extends State<AlertBox> {
                         LocalUser.tocken -= total.toInt();
                         LocalUser.stocks[stockId]['count'] += val;
                         LocalUser.stocks[stockId]['totalSell'] -= total;
-                        LocalUser.history[stockId].removeLast();
-                        error = 'Failed to Sell!, Try Againnn';
+                        LocalUser.history.removeLast();
+                        error = 'Network Error!\ncheck your connection';
                       }
                     } catch (e) {
-                      error = "Failed to Sell!, Try Agian";
+                      error = "Network Error!\ncheck your connection";
                     }
                     setState(() {
                       load = false;
@@ -193,7 +196,8 @@ class _AlertBoxState extends State<AlertBox> {
                       LocalUser.tocken -= total;
                       LocalUser.stocks[stockId]['count'] += val;
                       LocalUser.stocks[stockId]['totalBuy'] += total;
-                      LocalUser.history[stockId].add({
+                      LocalUser.history.add({
+                        'stockId': stockId,
                         'time': DateTime.now().toString(),
                         'price': price.toString(),
                         'isSell': false.toString(),
@@ -203,17 +207,18 @@ class _AlertBoxState extends State<AlertBox> {
                         //trying to update serverData
                         await DatabaseService().updateDatabase();
                         Navigator.pop(context);
+                        print(LocalUser.history.length);
                       } catch (e) {
                         //undoing all changes if fails
                         LocalUser.tocken += total.toInt();
                         LocalUser.stocks[stockId]['count'] -= val;
                         LocalUser.stocks[stockId]['totalBuy'] -= total;
-                        LocalUser.history[stockId].removeLast();
-                        error = 'Failed to Buy! Try Againnn';
+                        LocalUser.history.removeLast();
+                        error = 'Network Error!\ncheck your connection';
                       }
                     }
                   } catch (e) {
-                    error = "Failed to Buy!, Try Again";
+                    error = "Network Error!\ncheck your connection";
                   }
                   setState(() {
                     load = false;

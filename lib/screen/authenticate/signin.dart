@@ -31,7 +31,7 @@ class _SignInState extends State<SignIn> {
         shadowColor: Colors.pink,
         elevation: 10,
         title: Text(
-          "EQUITY MANAGER",
+          "EQUITY TRAINER",
           style: TextStyle(color: Colors.pink),
         ),
         actions: [

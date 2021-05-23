@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hello_world/models/constants.dart';
+import 'package:hello_world/models/user.dart';
 import 'package:hello_world/services/authentication.dart';
+import 'package:hello_world/services/database.dart';
 
 class SignUp extends StatefulWidget {
   final Function toggle;
@@ -38,7 +40,7 @@ class _SignUpState extends State<SignUp> {
         shadowColor: Colors.pink,
         elevation: 20,
         title: Text(
-          "EQUITY MANAGER",
+          "EQUITY TRAINER",
           style: TextStyle(color: Colors.pink),
         ),
         actions: [

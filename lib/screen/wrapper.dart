@@ -19,7 +19,9 @@ class _WrapperState extends State<Wrapper> {
     if (_user == null) {
       return Auth();
     } else {
-      LocalUser.uid = _user.uid;
+      if (LocalUser.uid != _user.uid) {
+        LocalUser.uid = _user.uid;
+      }
       return StreamProvider<DocumentSnapshot>.value(
         value: DatabaseService().userData,
         child: Home(),

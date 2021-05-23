@@ -39,7 +39,7 @@ Widget appBar(Icon icon, String path, BuildContext context) => AppBar(
       shadowColor: Colors.pink,
       elevation: 20,
       title: Text(
-        "EQUITY MANAGER",
+        "EQUITY TRAINER",
         style: TextStyle(color: Colors.pink),
       ),
       actions: [

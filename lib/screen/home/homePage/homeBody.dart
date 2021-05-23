@@ -31,8 +31,9 @@ class _HomePageState extends State<HomePage> {
           } else {
             return Center(
                 child: Text(
-              'Error in Fetching Information!',
+              'Network Error!\nCheck your internet connection.',
               style: TextStyle(color: Colors.redAccent),
+              textAlign: TextAlign.center,
             ));
           }
         }
@@ -45,14 +46,6 @@ class _HomePageState extends State<HomePage> {
                 .toList(),
           ),
         );
-        // itemCount: 10,
-        // physics: BouncingScrollPhysics(),
-        // // itemBuilder: (context, index) => StockTile(
-        // //   stockId: requestC[index],
-        // // ),
-        // children:
-        //     requestC.map((value) => StockTile(stockId: value)).toList());
-        // );
       },
     );
   }
@@ -68,7 +61,7 @@ class StockTile extends StatelessWidget {
     dynamic value = quoteRaw[stockId];
     int change = (value['regularMarketChangePercent'] * 100).toInt();
     dynamic color = (change < 0) ? Colors.red[800] : Colors.green[800];
-    return FlatButton(
+    return TextButton(
       onPressed: () {
         Navigator.push(
             context,
@@ -102,10 +95,8 @@ class StockTile extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.baseline,
               children: [
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
                   children: [
                     Text(
                       value['regularMarketPrice'].toString() ?? 'Error',

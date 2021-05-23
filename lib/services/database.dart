@@ -20,16 +20,6 @@ class DatabaseService {
     });
   }
 
-  // //afterLogin
-  // Future updateDatabaseA(String name, String number, String email) async {
-  //   return await databaseCollection.doc(uid).set(
-  //       {'name': name, 'number': number, 'email': email, "tocken": 100000});
-  // }
-
-  // Future<DocumentSnapshot> getUserData() async {
-  //   return databaseCollection.doc(uid).get();
-  // }
-
   Stream<DocumentSnapshot> get userData {
     return databaseCollection.doc(LocalUser.uid).snapshots();
   }

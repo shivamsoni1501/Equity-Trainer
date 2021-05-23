@@ -1,5 +1,5 @@
 class LocalUser {
-  static String uid;
+  static String uid = 'NULL';
   static double tocken;
   static bool load = true;
   static Map<String, String> userData = {
@@ -35,23 +35,38 @@ class LocalUser {
     'NKE': {'count': 0, 'totalSell': 0, 'totalBuy': 0}
   };
 
-  static Map<String, List<Map<String, String>>> history = {
-    'AAPL': List(),
-    'GOOG': List(),
-    'MSFT': List(),
-    'AMZN': List(),
-    'FB': List(),
-    'TSLA': List(),
-    'BABA': List(),
-    'V': List(),
-    'NFLX': List(),
-    'NKE': List()
+  static List<Map<String, String>> history = [];
+
+  static Map<String, List<Map<String, String>>> stocksHistory = {
+    'AAPL': [],
+    'GOOG': [],
+    'MSFT': [],
+    'AMZN': [],
+    'FB': [],
+    'TSLA': [],
+    'BABA': [],
+    'V': [],
+    'NFLX': [],
+    'NKE': []
   };
 
-  updateLocalUser(String name, String phone, String email, String password) {
+  static updateLocalUser(
+      String name, String phone, String email, String password) {
     LocalUser.userData['name'] = name;
     LocalUser.userData['phone'] = phone;
     LocalUser.userData['email'] = email;
     LocalUser.userData['password'] = password;
+  }
+
+  static clear() {
+    LocalUser.history.clear();
+    LocalUser.stocksHistory.forEach((key, value) {
+      stocksHistory[key].clear();
+    });
+    LocalUser.stocks.forEach((key, value) {
+      value.forEach((key1, value1) {
+        stocks[key][key1] = 0;
+      });
+    });
   }
 }

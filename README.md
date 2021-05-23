@@ -1,4 +1,4 @@
-# Equity Manager
+# Equity Trainer
 
 A Flutter based Application for trying out Equity Exchange with tocken money.
 

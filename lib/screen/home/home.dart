@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/user.dart';
+import 'package:hello_world/screen/home/HistoryPage/history.dart';
 import 'package:hello_world/screen/home/homePage/homeBody.dart';
 import 'package:hello_world/screen/home/profilePage/profileBody.dart';
 import 'package:hello_world/screen/home/portfolioPage/portfolio.dart';
@@ -21,23 +22,30 @@ class _HomeState extends State<Home> {
     snapshot = Provider.of<DocumentSnapshot>(context);
     if (snapshot != null) {
       dynamic data = snapshot.data();
+
       data['stocks'].forEach((k, v) {
         v.forEach((k1, v1) {
           LocalUser.stocks[k][k1] = v1.toDouble();
         });
       });
+
       LocalUser.stockList.clear();
       data['stockList'].forEach((i) => LocalUser.stockList.add(i.toString()));
-      data['history'].forEach((k, v) {
-        LocalUser.history[k].clear();
-        for (var item in v) {
-          Map<String, String> map = Map();
-          item.forEach((k1, v1) {
-            map[k1] = v1.toString();
-          });
-          LocalUser.history[k].add(map);
-        }
+
+      LocalUser.stockList.forEach((element) {
+        LocalUser.stocksHistory[element].clear();
       });
+
+      LocalUser.history.clear();
+      data['history'].forEach((i) {
+        Map<String, String> map = Map();
+        i.forEach((k, v) {
+          map[k.toString()] = v.toString();
+        });
+        LocalUser.history.add(map);
+        LocalUser.stocksHistory[map['stockId']].add(map);
+      });
+
       data['userData'].forEach((k, v) {
         LocalUser.userData[k] = v.toString();
       });
@@ -58,7 +66,7 @@ class _HomeState extends State<Home> {
         shadowColor: Colors.pink,
         elevation: 10,
         title: Text(
-          "EQUITY MANAGER",
+          "EQUITY TRAINER",
           style: TextStyle(color: Colors.pink),
         ),
         actions: [
@@ -71,12 +79,13 @@ class _HomeState extends State<Home> {
         ],
       ),
       body: (_selectedIndex < 2)
-          ? ((_selectedIndex == 0) ? HomePage() : Porfolio())
-          : ProfilePage(),
+          ? ((_selectedIndex == 0) ? HomePage() : History())
+          : ((_selectedIndex == 2) ? Porfolio() : ProfilePage()),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,
         unselectedItemColor: Colors.grey,
         selectedItemColor: Colors.pink,
+        type: BottomNavigationBarType.fixed,
         iconSize: 30,
         currentIndex: _selectedIndex,
         onTap: (val) {
@@ -90,6 +99,9 @@ class _HomeState extends State<Home> {
                 break;
               case 2:
                 _selectedIndex = 2;
+                break;
+              case 3:
+                _selectedIndex = 3;
             }
           });
         },
@@ -97,6 +109,10 @@ class _HomeState extends State<Home> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history),
+            label: "History",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.portrait),

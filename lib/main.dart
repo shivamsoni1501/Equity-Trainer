@@ -12,22 +12,22 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return StreamProvider<User>.value(
       value: AuthenticationService().user,
       child: MaterialApp(
-        title: 'Equity Manager',
+        title: 'Equity Trainer',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           textTheme: TextTheme(
-              headline3: TextStyle(
-                  fontSize: 30,
-                  color: Colors.pink,
-                  fontWeight: FontWeight.bold,
-                  textBaseline: null,
-                  decoration: TextDecoration.none)),
+            headline3: TextStyle(
+                fontSize: 30,
+                color: Colors.pink,
+                fontWeight: FontWeight.bold,
+                textBaseline: TextBaseline.alphabetic,
+                decoration: TextDecoration.none),
+          ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: Wrapper(),

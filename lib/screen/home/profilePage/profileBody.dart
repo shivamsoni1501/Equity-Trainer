@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/constants.dart';
 import 'package:hello_world/models/user.dart';
+import 'package:hello_world/services/authentication.dart';
 import 'package:hello_world/services/database.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -30,9 +31,12 @@ class _ProfilePageState extends State<ProfilePage> {
     controllerE.text = LocalUser.userData['email'];
     return Center(
       child: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Container(
-          margin: EdgeInsets.all(10),
+          width: 400,
+          margin: EdgeInsets.all(15),
           padding: EdgeInsets.all(10),
+          alignment: Alignment.center,
           decoration: boxDecoration,
           child: Form(
             key: _formKey,
@@ -77,7 +81,22 @@ class _ProfilePageState extends State<ProfilePage> {
                         LocalUser.userData['phone'] = controllerN.text;
                         LocalUser.userData['email'] = controllerE.text;
                         await DatabaseService().updateDatabase();
-                        print("succeded");
+                        // print('DATABASE');
+                        // if (LocalUser.userData['name'] != controller.text) {
+                        //   await AuthenticationService()
+                        //       .updateName(controller.text);
+                        //   print('NAME');
+                        // }
+
+                        // if (LocalUser.userData['email'] != controllerE.text) {
+                        //   await AuthenticationService()
+                        //       .updateEmail(controllerE.text);
+                        //   print('EMAIL');
+
+                        //   await AuthenticationService().varifyEmail();
+                        //   print('VARIFICATION SENT');
+                        // }
+                        // print('SSSSSSSSSSSSSSSSSSSSSSss');
                       }
                       setState(() {
                         index = 0;

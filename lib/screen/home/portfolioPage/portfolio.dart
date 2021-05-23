@@ -9,10 +9,21 @@ class Porfolio extends StatefulWidget {
 }
 
 class _PorfolioState extends State<Porfolio> {
+  List<String> cList = [];
   fetchData() async {
     quoteRaw = await FinanceQuote.getRawData(
         quoteProvider: QuoteProvider.yahoo, symbols: LocalUser.stockList);
     return quoteRaw;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    LocalUser.stockList.forEach((element) {
+      if (LocalUser.stocksHistory[element].length != 0) {
+        cList.add(element);
+      }
+    });
   }
 
   @override
@@ -30,20 +41,28 @@ class _PorfolioState extends State<Porfolio> {
           } else {
             return Center(
                 child: Text(
-              'Error in Fetching Information!',
+              'Network Error!\nCheck your internet connection.',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.redAccent),
             ));
           }
         }
-        return ListView.builder(
-          itemCount: LocalUser.stockList.length,
-          itemExtent: width,
-          itemBuilder: (context, index) => Tile(
-            stockId: LocalUser.stockList[index],
-          ),
-          scrollDirection: Axis.horizontal,
-          physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
-        );
+        return (cList.length == 0)
+            ? Center(
+                child: Text(
+                  'No Transaction Yet!',
+                  style: textStyle,
+                ),
+              )
+            : ListView.builder(
+                itemCount: cList.length,
+                itemExtent: width,
+                itemBuilder: (context, index) => Tile(
+                  stockId: cList[index],
+                ),
+                scrollDirection: Axis.horizontal,
+                physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
+              );
       },
     );
   }
@@ -55,7 +74,12 @@ class Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int history = LocalUser.history[stockId].length;
+    int historyL = LocalUser.stocksHistory[stockId].length;
+    if (historyL == 0) {
+      return Container();
+    }
+    print(stockId);
+    print(historyL);
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
@@ -135,12 +159,17 @@ class Tile extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.pink,
               ),
-              child: ListView.builder(
-                itemCount: history,
-                itemBuilder: (context, index) => HistoryTile(
-                  data: LocalUser.history[stockId][history - index - 1],
-                ),
-              ),
+              child: (historyL <= 0)
+                  ? Container(
+                      child: Text('NO Transactions!'),
+                      alignment: Alignment.center)
+                  : ListView.builder(
+                      itemCount: historyL,
+                      itemBuilder: (context, index) => HistoryTile(
+                        data: LocalUser.stocksHistory[stockId]
+                            [historyL - index - 1],
+                      ),
+                    ),
             ),
           ),
         ],

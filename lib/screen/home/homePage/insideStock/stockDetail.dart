@@ -89,10 +89,9 @@ class _StockDetailsState extends State<StockDetails> {
                 height: 15,
               ),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.baseline,
                 children: [
                   Text(
-                    _value['regularMarketPrice'].toString() ?? 'Error',
+                    _value['regularMarketPrice'].toString() ?? 'N.A.',
                     style: TextStyle(
                         fontSize: 15,
                         color: Colors.white70,
