@@ -2,6 +2,8 @@ import 'package:finance_quote/finance_quote.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/constants.dart';
 import 'package:hello_world/models/user.dart';
+import 'package:hello_world/screen/home/homePage/insideStock/stockDetail.dart';
+import 'package:intl/intl.dart';
 
 class Porfolio extends StatefulWidget {
   @override
@@ -28,8 +30,8 @@ class _PorfolioState extends State<Porfolio> {
 
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size;
-    var width = screenSize.width;
+    // var screenSize = MediaQuery.of(context).size;
+    // var width = screenSize.width;
     return FutureBuilder(
       future: (quoteRaw == null) ? fetchData() : null,
       builder: (context, snapshot) {
@@ -54,165 +56,376 @@ class _PorfolioState extends State<Porfolio> {
                   style: textStyle,
                 ),
               )
-            : ListView.builder(
-                itemCount: cList.length,
-                itemExtent: width,
-                itemBuilder: (context, index) => Tile(
-                  stockId: cList[index],
+            : Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ListView.builder(
+                  itemCount: cList.length,
+                  itemExtent: 170,
+                  itemBuilder: (context, index) => StockTile(
+                    stockId: cList[index],
+                  ),
+                  physics: BouncingScrollPhysics(),
                 ),
-                scrollDirection: Axis.horizontal,
-                physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
               );
       },
     );
   }
 }
 
-class Tile extends StatelessWidget {
-  final String stockId;
-  Tile({this.stockId});
+class StockTile extends StatelessWidget {
+  // final String cName;
+  final dynamic stockId;
+  const StockTile({this.stockId});
 
   @override
   Widget build(BuildContext context) {
-    int historyL = LocalUser.stocksHistory[stockId].length;
-    if (historyL == 0) {
-      return Container();
-    }
-    print(stockId);
-    print(historyL);
+    dynamic value = quoteRaw[stockId];
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        color: Colors.black,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            spreadRadius: 0,
+            blurRadius: 6,
+            color: Colors.black54,
+            offset: Offset(0, 5),
+          )
+        ],
+        color: customColorScheme.surface,
       ),
-      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
-      padding: EdgeInsets.all(15),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    stockId,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.pink,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                  Text(
-                    quoteRaw[stockId]['shortName'],
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.pink.shade900,
-                    ),
-                    textAlign: TextAlign.left,
-                  ),
-                ],
-              ),
-              CircleAvatar(
-                backgroundColor: Colors.grey,
-                child: Text(
-                  LocalUser.stocks[stockId]['count'].toInt().toString(),
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
-            ],
-          ),
-          Divider(
-            color: Colors.pink,
-            indent: 20,
-            endIndent: 20,
-          ),
-          Text(
-            'Total Investment',
-            style: TextStyle(color: Colors.grey, fontSize: 10),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            LocalUser.stocks[stockId]['totalBuy'].floorToDouble().toString(),
-            style: TextStyle(
-                color: Colors.pink, fontSize: 15, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 10),
-          Text(
-            'Total Outcome',
-            style: TextStyle(color: Colors.grey, fontSize: 10),
-            textAlign: TextAlign.center,
-          ),
-          Text(
-            LocalUser.stocks[stockId]['totalSell'].floorToDouble().toString(),
-            style: TextStyle(
-                color: Colors.pink, fontSize: 15, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          SizedBox(height: 10),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.pink,
-              ),
-              child: (historyL <= 0)
-                  ? Container(
-                      child: Text('NO Transactions!'),
-                      alignment: Alignment.center)
-                  : ListView.builder(
-                      itemCount: historyL,
-                      itemBuilder: (context, index) => HistoryTile(
-                        data: LocalUser.stocksHistory[stockId]
-                            [historyL - index - 1],
+      margin: EdgeInsets.symmetric(vertical: 5),
+      padding: EdgeInsets.all(10),
+      child: TextButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => TranHistory(stockId: stockId)));
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Hero(
+                tag: stockId + '0',
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: customColorScheme.background,
+                      foregroundColor: Colors.white54,
+                      radius: 23,
+                      child: Text(
+                        LocalUser.stocks[stockId]['count'].toInt().toString(),
                       ),
                     ),
+                    Text(
+                      stockId,
+                      style: Theme.of(context).textTheme.headline2,
+                      textAlign: TextAlign.center,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          value['regularMarketPrice'].toString() ?? 'Error',
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        Text(
+                          ' USD',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-        ],
+            Divider(
+              color: Colors.grey[800],
+              thickness: 2,
+              indent: 0,
+              endIndent: 0,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Total Investment',
+                        style: Theme.of(context).textTheme.headline6,
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        LocalUser.stocks[stockId]['totalBuy']
+                            .floorToDouble()
+                            .toString(),
+                        style: Theme.of(context).textTheme.headline4,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Total Earn',
+                        style: Theme.of(context).textTheme.headline6,
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        LocalUser.stocks[stockId]['totalSell']
+                            .floorToDouble()
+                            .toString(),
+                        style: Theme.of(context).textTheme.headline4,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
-class HistoryTile extends StatelessWidget {
-  final Map<String, String> data;
-  HistoryTile({this.data});
+class TranHistory extends StatelessWidget {
+  final String stockId;
+  const TranHistory({Key key, this.stockId}) : super(key: key);
+
+  getItems(String a1, String a2, BuildContext context) {
+    return Expanded(
+      child: Container(
+        height: 70,
+        child: Column(
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              a1,
+              style: Theme.of(context).textTheme.headline6,
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              a2,
+              style:
+                  Theme.of(context).textTheme.headline4.copyWith(fontSize: 18),
+              textAlign: TextAlign.center,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    List time = data['time'].split(' ');
-    Color color = (data['isSell'] == 'true') ? Colors.red : Colors.green;
+    dynamic value = quoteRaw[stockId];
+    final int historyL = LocalUser.stocksHistory[stockId].length;
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.white70,
+            onPressed: () => Navigator.pop(context)),
+        backgroundColor: customColorScheme.primary,
+        title: Hero(
+          tag: stockId + '0',
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // CircleAvatar(
+              //   backgroundColor: customColorScheme.background,
+              //   foregroundColor: Colors.white54,
+              //   radius: 23,
+              //   child: Text(
+              //     LocalUser.stocks[stockId]['count'].toInt().toString(),
+              //   ),
+              // ),
+              Text(
+                stockId,
+                style: Theme.of(context).textTheme.headline1,
+                textAlign: TextAlign.center,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    value['regularMarketPrice'].toString() ?? 'Error',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                  Text(
+                    ' USD',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      backgroundColor: customColorScheme.background,
+      body: Container(
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.all(10),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: customColorScheme.surface,
+        ),
+        child: Column(
+          children: [
+            Text(
+              'Details',
+              style: Theme.of(context).textTheme.headline3,
+            ),
+            Divider(
+              thickness: 2,
+              color: Colors.grey[800],
+            ),
+            Row(
+              children: [
+                getItems(
+                    'Total Investment',
+                    LocalUser.stocks[stockId]['totalBuy']
+                        .floorToDouble()
+                        .toString(),
+                    context),
+                getItems(
+                    'Total Earn',
+                    LocalUser.stocks[stockId]['totalSell']
+                        .floorToDouble()
+                        .toString(),
+                    context)
+              ],
+            ),
+            Row(
+              children: [
+                getItems(
+                    'number of owned stocks',
+                    LocalUser.stocks[stockId]['count'].toInt().toString(),
+                    context),
+                getItems('Market Volume',
+                    value['regularMarketVolume'].toString(), context)
+              ],
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StockDetails(stockId: stockId)));
+              },
+              child: Text(
+                'See More details',
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Past Transactions',
+              style: Theme.of(context).textTheme.headline3,
+            ),
+            Divider(
+              thickness: 2,
+              color: Colors.grey[800],
+            ),
+            Expanded(
+              child: Container(
+                alignment: Alignment.center,
+                child: ListView.builder(
+                  itemCount: historyL,
+                  itemBuilder: (context, index) => HTile(
+                    hData: LocalUser.stocksHistory[stockId]
+                        [historyL - index - 1],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HTile extends StatefulWidget {
+  final Map<String, String> hData;
+  const HTile({Key key, this.hData}) : super(key: key);
+
+  @override
+  _HTileState createState() => _HTileState();
+}
+
+class _HTileState extends State<HTile> {
+  Color color;
+  String time;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.hData['isSell'] == 'false') {
+      color = Colors.green;
+    } else {
+      color = Colors.red;
+    }
+    time = widget.hData['time'];
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
-      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
       decoration: BoxDecoration(
-          boxShadow: [BoxShadow(blurRadius: 5)],
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(30)),
+        // border: Border.all(color: color),
+        borderRadius: BorderRadius.circular(35),
+        boxShadow: [
+          BoxShadow(
+            spreadRadius: 3,
+            blurRadius: 0,
+            offset: Offset(0, 3),
+            color: Colors.black38,
+          )
+        ],
+        color: customColorScheme.primaryVariant,
+      ),
+      height: 60,
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      margin: EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CircleAvatar(
-            backgroundColor: color,
-            foregroundColor: Colors.black,
-            child: Text(data['count']),
+            backgroundColor: customColorScheme.background,
+            foregroundColor: color,
+            radius: 23,
+            child: Text(widget.hData['count']),
           ),
           Text(
-            '\$${data['price']}',
-            style: TextStyle(color: color),
+            widget.hData['price'],
+            style: Theme.of(context).textTheme.headline4,
+            textAlign: TextAlign.left,
           ),
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${time[1].substring(0, 8)}',
-                style: TextStyle(color: color),
+                DateFormat.Hm().format(DateTime.parse(time)),
+                style: Theme.of(context).textTheme.headline5,
               ),
-              Text('${time[0]}', style: TextStyle(color: color)),
+              Text(
+                DateFormat.yMMMd().format(DateTime.parse(time)),
+                style: Theme.of(context).textTheme.headline5,
+              ),
             ],
-          )
+          ),
         ],
       ),
     );

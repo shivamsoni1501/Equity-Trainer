@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/models/constants.dart';
 import 'package:hello_world/models/user.dart';
-import 'package:hello_world/services/authentication.dart';
 import 'package:hello_world/services/database.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -43,8 +42,8 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Column(
               children: [
                 CircleAvatar(
-                  backgroundColor: Colors.white.withAlpha(30),
-                  child: Icon(Icons.person, color: Colors.pink, size: 80),
+                  backgroundColor: customColorScheme.background,
+                  child: Icon(Icons.person, color: Colors.white60, size: 80),
                   radius: 60,
                 ),
                 Container(
@@ -55,12 +54,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: Icon(
                           Icons.attach_money,
-                          color: Colors.pink,
+                          color: Colors.white30,
                         ),
                       ),
                       Text(
                         "${LocalUser.tocken.floorToDouble()}",
-                        style: TextStyle(color: Colors.white70),
+                        style: Theme.of(context).textTheme.headline4,
                       ),
                     ],
                   ),
@@ -68,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Divider(
                   height: 20,
                   thickness: 2,
-                  color: Colors.pink,
+                  color: Colors.grey[800],
                 ),
                 IndexedStack(index: index, children: [
                   IconButton(
@@ -103,7 +102,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         toggle();
                       });
                     },
-                    color: Colors.pink,
+                    color: Colors.white60,
                     icon: (!readOn) ? Icon(Icons.edit) : Icon(Icons.save),
                   ),
                   CircularProgressIndicator(
@@ -115,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.black,
+                    color: customColorScheme.background,
                     // boxShadow: [BoxShadow(color: Colors.pink, spreadRadius: 2)],
                   ),
                   child: Column(
@@ -126,10 +125,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         cursorColor: Colors.pinkAccent,
                         keyboardType: TextInputType.name,
                         textCapitalization: TextCapitalization.words,
-                        style: TextStyle(
-                            color: Colors.pink,
-                            letterSpacing: 2,
-                            fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.headline4.copyWith(
+                            fontWeight: FontWeight.w900, letterSpacing: 2),
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                               borderSide:
@@ -141,24 +138,22 @@ class _ProfilePageState extends State<ProfilePage> {
                           // border: null,
                           prefixIcon: Icon(
                             Icons.person,
-                            color: Colors.pink,
+                            color: Colors.white60,
                           ),
                         ),
                       ),
                       Divider(
                         indent: 20,
                         endIndent: 20,
-                        color: Colors.pink,
+                        color: Colors.grey[800],
                       ),
                       TextFormField(
                         enabled: readOn,
                         controller: controllerN,
                         cursorColor: Colors.pinkAccent,
                         keyboardType: TextInputType.number,
-                        style: TextStyle(
-                            color: Colors.pink,
-                            letterSpacing: 2,
-                            fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.headline4.copyWith(
+                            fontWeight: FontWeight.w900, letterSpacing: 2),
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                               borderSide:
@@ -170,28 +165,26 @@ class _ProfilePageState extends State<ProfilePage> {
                           // border: null,
                           prefixIcon: Icon(
                             Icons.phone,
-                            color: Colors.pink,
+                            color: Colors.white60,
                           ),
                         ),
                       ),
                       Divider(
                         indent: 20,
                         endIndent: 20,
-                        color: Colors.pink,
+                        color: Colors.grey[800],
                       ),
                       TextFormField(
                         enabled: false,
                         controller: controllerE,
                         cursorColor: Colors.pinkAccent,
                         keyboardType: TextInputType.emailAddress,
-                        style: TextStyle(
-                            color: Colors.pink,
-                            letterSpacing: 2,
-                            fontWeight: FontWeight.bold),
+                        style: Theme.of(context).textTheme.headline4.copyWith(
+                            fontWeight: FontWeight.w900, letterSpacing: 2),
                         decoration: InputDecoration(
                           prefixIcon: Icon(
                             Icons.email,
-                            color: Colors.pink,
+                            color: Colors.white60,
                           ),
                         ),
                       ),

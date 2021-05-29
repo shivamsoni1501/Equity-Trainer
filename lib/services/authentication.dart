@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hello_world/models/user.dart';
-import 'package:hello_world/services/database.dart';
+import '../services/database.dart';
+import '../models/user.dart';
 
 class AuthenticationService {
   //defining firebase authenticating instance

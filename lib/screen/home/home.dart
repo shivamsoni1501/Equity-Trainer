@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_world/models/constants.dart';
 import 'package:hello_world/models/user.dart';
 import 'package:hello_world/screen/home/HistoryPage/history.dart';
 import 'package:hello_world/screen/home/homePage/homeBody.dart';
@@ -58,16 +59,16 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: customColorScheme.primary,
         centerTitle: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
         ),
-        shadowColor: Colors.pink,
         elevation: 10,
+        shadowColor: Colors.black,
         title: Text(
           "EQUITY TRAINER",
-          style: TextStyle(color: Colors.pink),
+          style: Theme.of(context).textTheme.headline1,
         ),
         actions: [
           IconButton(
@@ -78,12 +79,14 @@ class _HomeState extends State<Home> {
           )
         ],
       ),
+      backgroundColor: customColorScheme.background,
       body: (_selectedIndex < 2)
           ? ((_selectedIndex == 0) ? HomePage() : History())
           : ((_selectedIndex == 2) ? Porfolio() : ProfilePage()),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.black,
-        unselectedItemColor: Colors.grey,
+        backgroundColor: customColorScheme.primary,
+        elevation: 12,
+        unselectedItemColor: Colors.grey.shade600,
         selectedItemColor: Colors.pink,
         type: BottomNavigationBarType.fixed,
         iconSize: 30,
@@ -116,7 +119,7 @@ class _HomeState extends State<Home> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.portrait),
-            label: "portfolio",
+            label: "Portfolio",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:hello_world/models/constants.dart';
 import 'package:hello_world/models/user.dart';
+import 'package:intl/intl.dart';
 
 class History extends StatefulWidget {
   const History({Key key}) : super(key: key);
@@ -24,6 +25,29 @@ class _HistoryState extends State<History> {
     totalI = totalI.floorToDouble();
   }
 
+  getItems(String a1, String a2) {
+    return Expanded(
+      child: Container(
+        height: 70,
+        child: Column(
+          children: [
+            Text(
+              a1,
+              style: Theme.of(context).textTheme.headline6,
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              a2,
+              style:
+                  Theme.of(context).textTheme.headline4.copyWith(fontSize: 18),
+              textAlign: TextAlign.center,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     int hLen = LocalUser.history.length;
@@ -31,74 +55,31 @@ class _HistoryState extends State<History> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
-          margin: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
-            color: Colors.black,
-          ),
+          margin: EdgeInsets.all(10),
           height: 150,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'Total Invested    :',
-                      style: TextStyle(
-                          color: Colors.pink,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25),
-                    ),
-                    Text(
-                      'Total Earned    :',
-                      style: TextStyle(
-                          color: Colors.pink,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 25),
-                    ),
-                  ]),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '$totalI',
-                      style: TextStyle(
-                          color: Colors.white70,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    ),
-                    Text(
-                      '$totalE',
-                      style: TextStyle(
-                          color: Colors.white70,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    ),
-                  ]),
+              getItems('Total Invested', totalI.toString()),
+              getItems('Total Earned', totalE.toString())
             ],
           ),
         ),
         Expanded(
           child: Container(
             padding: EdgeInsets.all(10),
-            margin: EdgeInsets.fromLTRB(5, 0, 5, 5),
+            margin: EdgeInsets.all(10),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
-              color: Colors.black,
+              borderRadius: BorderRadius.circular(20),
+              color: customColorScheme.surface,
             ),
             child: Column(
               children: [
                 Text(
                   'Transaction History',
-                  style: TextStyle(
-                      color: Colors.pink,
-                      // fontWeight: FontWeight.bold,
-                      fontSize: 20),
+                  style: Theme.of(context).textTheme.headline3,
                 ),
                 Divider(
+                  height: 25,
                   color: Colors.white70,
                 ),
                 Expanded(
@@ -135,7 +116,7 @@ class HTile extends StatefulWidget {
 
 class _HTileState extends State<HTile> {
   Color color;
-  List time;
+  String time;
   @override
   void initState() {
     super.initState();
@@ -144,52 +125,53 @@ class _HTileState extends State<HTile> {
     } else {
       color = Colors.red;
     }
-    time = widget.hData['time'].split(' ');
+    time = widget.hData['time'];
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white70),
+        // border: Border.all(color: color),
         borderRadius: BorderRadius.circular(35),
         boxShadow: [
           BoxShadow(
-            spreadRadius: 0,
-            blurRadius: 2,
-            color: Colors.white70,
+            spreadRadius: 3,
+            blurRadius: 0,
+            offset: Offset(0, 3),
+            color: Colors.black38,
           )
         ],
-        color: Colors.black,
+        color: customColorScheme.primaryVariant,
       ),
       height: 60,
       padding: EdgeInsets.symmetric(horizontal: 20),
-      margin: EdgeInsets.all(5),
+      margin: EdgeInsets.all(10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CircleAvatar(
-            backgroundColor: color,
-            foregroundColor: Colors.black,
+            backgroundColor: customColorScheme.background,
+            foregroundColor: color,
+            radius: 23,
             child: Text(widget.hData['count']),
           ),
           Text(
             widget.hData['stockId'],
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: color,
-            ),
+            style: Theme.of(context).textTheme.headline4,
             textAlign: TextAlign.left,
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                '${time[1].substring(0, 8)}',
-                style: TextStyle(color: color),
+                DateFormat.Hm().format(DateTime.parse(time)),
+                style: Theme.of(context).textTheme.headline5,
               ),
-              Text('${time[0]}', style: TextStyle(color: color)),
+              Text(
+                DateFormat.yMMMd().format(DateTime.parse(time)),
+                style: Theme.of(context).textTheme.headline5,
+              ),
             ],
           ),
         ],

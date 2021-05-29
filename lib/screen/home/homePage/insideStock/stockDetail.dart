@@ -18,27 +18,29 @@ class _StockDetailsState extends State<StockDetails> {
     return Icon(Icons.arrow_circle_down_rounded, color: color);
   }
 
-  Map<String, String> images = {
-    'AAPL':
-        'https://cdn4.iconfinder.com/data/icons/apple-products-2026/512/Apple_Logo-128.png',
-    'GOOG':
-        'https://cdn4.iconfinder.com/data/icons/picons-social/57/09-google-3-512.png',
-    'AMZN':
-        'https://cdn3.iconfinder.com/data/icons/picons-social/57/27-amazon-128.png',
-    'MSFT':
-        'https://cdn3.iconfinder.com/data/icons/picons-social/57/32-windows8-128.png',
-    'FB':
-        'https://cdn3.iconfinder.com/data/icons/social-media-black-white-2/512/BW_Facebook_2_glyph_svg-128.png',
-    'TSLA':
-        'https://cdn2.iconfinder.com/data/icons/logos-9/64/Logos_tesla-256.png',
-    'BABA': 'https://cdn.onlinewebfonts.com/svg/img_125353.png',
-    'V':
-        'https://cdn1.iconfinder.com/data/icons/picons-social/57/social_visa-128.png',
-    'NFLX':
-        'https://cdn4.iconfinder.com/data/icons/logos-and-brands-1/512/227_Netflix_logo-128.png',
-    'NKE':
-        'https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/230_Nike_logo-128.png'
-  };
+  getItems(String a1, String a2) {
+    return Expanded(
+      child: Container(
+        height: 70,
+        child: Column(
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              a1,
+              style: Theme.of(context).textTheme.headline6,
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              a2,
+              style:
+                  Theme.of(context).textTheme.headline4.copyWith(fontSize: 18),
+              textAlign: TextAlign.center,
+            )
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,34 +53,41 @@ class _StockDetailsState extends State<StockDetails> {
     print(_value['fiftyTwoWeekLowChangePercent']);
     int changeFL = (_value['fiftyTwoWeekLowChangePercent'] * 100).toInt();
 
-    color = (change < 0) ? Colors.red[800] : Colors.green[800];
+    color =
+        (change < 0) ? Colors.red.withAlpha(150) : Colors.green.withAlpha(120);
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 100,
-        backgroundColor: Colors.black,
-        leading: Container(
-          color: Colors.pink,
-          child: Image.network(images[widget.stockId] ??
-              'https://www.bing.com/th?id=OIP.Z2QqC4Dz1QJ3xEzej0UOUAHaJL&w=60&h=100&c=8&rs=1&qlt=90&dpr=1.25&pid=3.1&rm=2'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.white60,
+          onPressed: () => Navigator.pop(context),
         ),
-        elevation: 80,
-        shadowColor: Colors.black,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Hero(
-              tag: widget.stockId,
-              child: Text(_value['symbol'],
-                  style: Theme.of(context).textTheme.headline3),
-            ),
-            Text(_value['longName'],
-                style: TextStyle(color: Colors.pink[800], fontSize: 12)),
-          ],
+        toolbarHeight: 100,
+        backgroundColor: customColorScheme.primary,
+        elevation: 12,
+        automaticallyImplyLeading: false,
+        title: Hero(
+          tag: widget.stockId,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                _value['symbol'],
+                style: Theme.of(context).textTheme.headline1,
+              ),
+              Text(
+                _value['longName'],
+                style: Theme.of(context).textTheme.headline6,
+              ),
+            ],
+          ),
         ),
         actions: [
           VerticalDivider(
-            color: Colors.white54,
+            color: Colors.black54,
+            thickness: 1,
             indent: 20,
+            width: 25,
             endIndent: 10,
           ),
           Column(
@@ -89,21 +98,20 @@ class _StockDetailsState extends State<StockDetails> {
                 height: 15,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    _value['regularMarketPrice'].toString() ?? 'N.A.',
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.white70,
-                        fontWeight: FontWeight.bold),
+                    _value['regularMarketPrice'].toString() ?? 'Error',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        .copyWith(fontSize: 16),
                   ),
                   Text(
                     ' USD',
-                    style: TextStyle(
-                      fontSize: 8,
-                      color: Colors.white54,
-                    ),
-                  )
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                 ],
               ),
               SizedBox(
@@ -113,11 +121,11 @@ class _StockDetailsState extends State<StockDetails> {
                 children: [
                   arrow(),
                   Text(
-                    "${changeI / 100}\n(${change / 100}%)",
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: color,
-                    ),
+                    "  ${changeI / 100}\n (${change / 100}%)",
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6
+                        .copyWith(color: color),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -129,6 +137,7 @@ class _StockDetailsState extends State<StockDetails> {
           )
         ],
       ),
+      backgroundColor: customColorScheme.background,
       floatingActionButton: FloatingActionButton.extended(
         label: Text(
           "Buy / Sell",
@@ -148,75 +157,66 @@ class _StockDetailsState extends State<StockDetails> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: ListView(
-        padding: EdgeInsets.all(5),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         physics: BouncingScrollPhysics(),
         children: [
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: Colors.black,
+              boxShadow: [
+                BoxShadow(
+                  spreadRadius: 0,
+                  blurRadius: 6,
+                  color: Colors.black54,
+                  offset: Offset(0, 5),
+                )
+              ],
+              color: customColorScheme.surface,
             ),
-            width: 500,
+            // width: 500,
             padding: EdgeInsets.all(20),
             child: Column(
               children: [
                 SizedBox(height: 10),
                 Text(
                   "TODAY",
-                  style: TextStyle(
-                      color: Colors.pink,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25),
+                  style: Theme.of(context).textTheme.headline3,
                 ),
                 Divider(
                   height: 20,
                   thickness: 2,
-                  color: Colors.pink,
+                  color: Colors.grey[800],
                 ),
-                textL("Last Close"),
-                textR('${_value['regularMarketPreviousClose']}'),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
+                Row(
+                  children: [
+                    getItems("Last Close",
+                        _value['regularMarketPreviousClose'].toString()),
+                    getItems(
+                        "Todays Open", _value['regularMarketOpen'].toString()),
+                  ],
                 ),
-                textL("Todays Open"),
-                textR('${_value['regularMarketOpen']}'),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
+                Row(
+                  children: [
+                    getItems("Todays Price",
+                        _value['regularMarketPrice'].toString()),
+                    getItems(
+                        "Todays Change", '${changeI / 100} (${change / 100}%)'),
+                  ],
                 ),
-                textL("Todays Prize"),
-                textR('${_value['regularMarketPrice']}'),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
+                Row(
+                  children: [
+                    getItems(
+                        "Todays Low", _value['regularMarketDayLow'].toString()),
+                    getItems("Todays High",
+                        _value['regularMarketDayHigh'].toString()),
+                  ],
                 ),
-                textL("Todays Change"),
-                textR("${changeI / 100} (${change / 100}%)"),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
+                Row(
+                  children: [
+                    getItems("Market Volume",
+                        _value['regularMarketVolume'].toString()),
+                  ],
                 ),
-                textL("Todays High"),
-                textR('${_value['regularMarketDayHigh']}'),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                textL("Todays Low"),
-                textR('${_value['regularMarketDayLow']}'),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                textL("Market Volume"),
-                textR('${_value['regularMarketVolume']}'),
                 SizedBox(height: 10),
               ],
             ),
@@ -224,9 +224,16 @@ class _StockDetailsState extends State<StockDetails> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: Colors.black,
+              color: customColorScheme.surface,
+              boxShadow: [
+                BoxShadow(
+                  spreadRadius: 0,
+                  blurRadius: 6,
+                  color: Colors.black54,
+                  offset: Offset(0, 5),
+                )
+              ],
             ),
-            width: 500,
             padding: EdgeInsets.all(20),
             margin: EdgeInsets.only(top: 10),
             child: Column(
@@ -234,39 +241,27 @@ class _StockDetailsState extends State<StockDetails> {
                 SizedBox(height: 10),
                 Text(
                   "PAST 52 WEEKs",
-                  style: TextStyle(
-                      color: Colors.pink,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25),
+                  style: Theme.of(context).textTheme.headline3,
                 ),
                 Divider(
                   height: 20,
                   thickness: 2,
-                  color: Colors.pink,
+                  color: Colors.grey[800],
                 ),
-                textL("High"),
-                textR('${_value['fiftyTwoWeekHigh']}'),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
+                Row(
+                  children: [
+                    getItems("Low", _value['fiftyTwoWeekLow'].toString()),
+                    getItems("High", _value['fiftyTwoWeekHigh'].toString()),
+                  ],
                 ),
-                textL("Low"),
-                textR('${_value['fiftyTwoWeekLow']}'),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
+                Row(
+                  children: [
+                    getItems("Low Change",
+                        "${changeIFL / 100} (${changeFL / 100}%)"),
+                    getItems("High Change",
+                        "${changeIFH / 100} (${changeFH / 100}%)"),
+                  ],
                 ),
-                textL("High Change"),
-                textR("${changeIFH / 100} (${changeFH / 100}%)"),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                textL("Low Change"),
-                textR("${changeIFL / 100} (${changeFL / 100}%)"),
                 SizedBox(height: 10),
               ],
             ),
@@ -274,9 +269,16 @@ class _StockDetailsState extends State<StockDetails> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: Colors.black,
+              color: customColorScheme.surface,
+              boxShadow: [
+                BoxShadow(
+                  spreadRadius: 0,
+                  blurRadius: 6,
+                  color: Colors.black54,
+                  offset: Offset(0, 5),
+                )
+              ],
             ),
-            width: 500,
             padding: EdgeInsets.all(20),
             margin: EdgeInsets.only(top: 10),
             child: Column(
@@ -284,46 +286,63 @@ class _StockDetailsState extends State<StockDetails> {
                 SizedBox(height: 10),
                 Text(
                   "FUNDAMENTALS",
-                  style: TextStyle(
-                      color: Colors.pink,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25),
+                  style: Theme.of(context).textTheme.headline3,
                 ),
                 Divider(
                   height: 20,
                   thickness: 2,
-                  color: Colors.pink,
+                  color: Colors.grey[800],
                 ),
-                textL("Market Cap"),
-                textR('${_value['marketCap']}'),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
+                Row(
+                  children: [
+                    getItems("Currency", '${_value['currency']}'),
+                    getItems("P/E ratio", '${_value['trailingPE']}'),
+                  ],
                 ),
-                textL("Currency"),
-                textR('${_value['currency']}'),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
+                Row(
+                  children: [
+                    getItems(
+                        "Earning per Share", '${_value['epsCurrentYear']}'),
+                    getItems("Earning per Share (trailing year)",
+                        '${_value['epsTrailingTwelveMonths']}'),
+                  ],
                 ),
-                textL("Earning per Share"),
-                textR("${_value['epsCurrentYear']}"),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
+                Row(
+                  children: [
+                    getItems("Market Cap", '${_value['marketCap']}'),
+                  ],
                 ),
-                textL("P/E ratio"),
-                textR("${_value['trailingPE']}"),
-                Divider(
-                  color: Colors.white38,
-                  indent: 20,
-                  endIndent: 20,
-                ),
-                textL("Earning per Share (trailing year)"),
-                textR("${_value['epsTrailingTwelveMonths']}"),
+
+                // textL("Market Cap"),
+                // textR('${_value['marketCap']}'),
+                // Divider(
+                //   color: Colors.white38,
+                //   indent: 20,
+                //   endIndent: 20,
+                // ),
+                // textL("Currency"),
+                // textR('${_value['currency']}'),
+                // Divider(
+                //   color: Colors.white38,
+                //   indent: 20,
+                //   endIndent: 20,
+                // ),
+                // textL("Earning per Share"),
+                // textR("${_value['epsCurrentYear']}"),
+                // Divider(
+                //   color: Colors.white38,
+                //   indent: 20,
+                //   endIndent: 20,
+                // ),
+                // textL("P/E ratio"),
+                // textR("${_value['trailingPE']}"),
+                // Divider(
+                //   color: Colors.white38,
+                //   indent: 20,
+                //   endIndent: 20,
+                // ),
+                // textL("Earning per Share (trailing year)"),
+                // textR("${_value['epsTrailingTwelveMonths']}"),
                 SizedBox(height: 10),
               ],
             ),

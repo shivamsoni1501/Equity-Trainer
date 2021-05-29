@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hello_world/models/user.dart';
+import '../models/user.dart';
 
 class DatabaseService {
   static String uid;

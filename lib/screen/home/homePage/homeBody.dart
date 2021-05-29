@@ -20,33 +20,36 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: (quoteRaw == null) ? fetchData() : null,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
-          return Center(child: CircularProgressIndicator());
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasData) {
-            quoteRaw = snapshot.data;
-          } else {
-            return Center(
-                child: Text(
-              'Network Error!\nCheck your internet connection.',
-              style: TextStyle(color: Colors.redAccent),
-              textAlign: TextAlign.center,
-            ));
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      child: FutureBuilder(
+        future: (quoteRaw == null) ? fetchData() : null,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return Center(child: CircularProgressIndicator());
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              quoteRaw = snapshot.data;
+            } else {
+              return Center(
+                  child: Text(
+                'Network Error!\nCheck your internet connection.',
+                style: TextStyle(color: Colors.redAccent),
+                textAlign: TextAlign.center,
+              ));
+            }
           }
-        }
-        LocalUser.load = false;
-        return SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
+          LocalUser.load = false;
+          return GridView.count(
+            mainAxisSpacing: 5,
+            crossAxisCount: 2,
+            physics: BouncingScrollPhysics(),
             children: LocalUser.stockList
                 .map((value) => StockTile(stockId: value))
                 .toList(),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -60,7 +63,7 @@ class StockTile extends StatelessWidget {
   Widget build(BuildContext context) {
     dynamic value = quoteRaw[stockId];
     int change = (value['regularMarketChangePercent'] * 100).toInt();
-    dynamic color = (change < 0) ? Colors.red[800] : Colors.green[800];
+    // dynamic color = (change < 0) ? Colors.white30 : Colors.white30;
     return TextButton(
       onPressed: () {
         Navigator.push(
@@ -68,62 +71,57 @@ class StockTile extends StatelessWidget {
             MaterialPageRoute(
                 builder: (context) => StockDetails(stockId: stockId)));
       },
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.black,
-        ),
-        margin: EdgeInsets.symmetric(vertical: 5),
-        padding: EdgeInsets.all(10),
-        height: 150,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Hero(
-              tag: stockId,
-              child: Text(
+      child: Hero(
+        tag: stockId,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                spreadRadius: 0,
+                blurRadius: 6,
+                color: Colors.black54,
+                offset: Offset(0, 5),
+              )
+            ],
+            color: customColorScheme.surface,
+          ),
+          padding: EdgeInsets.all(2),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
                 value['shortName'],
                 style: Theme.of(context).textTheme.headline3,
                 textAlign: TextAlign.center,
               ),
-            ),
-            Divider(
-              color: Colors.pink,
-              indent: 20,
-              endIndent: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      value['regularMarketPrice'].toString() ?? 'Error',
-                      style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white70,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      ' USD',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.white54,
-                      ),
-                    )
-                  ],
-                ),
-                Text(
-                  " (${change / 100}%)",
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: color,
+              Divider(
+                color: Colors.grey[800],
+                thickness: 2,
+                indent: 20,
+                endIndent: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    value['regularMarketPrice'].toString() ?? 'Error',
+                    style: Theme.of(context).textTheme.headline4,
                   ),
-                )
-              ],
-            ),
-          ],
+                  Text(
+                    ' USD',
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
+                ],
+              ),
+              Text(
+                " (${change / 100}%)",
+                style: Theme.of(context).textTheme.headline6,
+                textAlign: TextAlign.center,
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -1,7 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/services/authentication.dart';
 
-// dynamic userId;
+// Color Themes
+ColorScheme customColorScheme = ColorScheme(
+  primary: customColors['dark'][2],
+  primaryVariant: customColors['dark'][4],
+  secondary: customColors['primary'][1],
+  secondaryVariant: customColors['primary'][2],
+  surface: customColors['dark'][1],
+  background: customColors['dark'][0],
+  error: Colors.redAccent,
+  onPrimary: customColors['primary'][2],
+  onSecondary: customColors['dark'][0],
+  onSurface: customColors['primary'][1],
+  onBackground: customColors['primary'][0],
+  onError: customColors['dark'][0],
+  brightness: Brightness.light,
+);
+// const color = Color(0xff012352);
+const Map<String, List<Color>> customColors = {
+  'primary': [Color(0xFFFFC1E3), Color(0xFFF48FB1), Color(0xFFBF5F82)],
+  'dark': [
+    Color(0xFF121212),
+    Color(0xFF1D1D1D),
+    Color(0xFF212121),
+    Color(0xFF242424),
+    Color(0xFF262626),
+    Color(0xFF2C2C2C),
+    Color(0xFF2D2D2D),
+    Color(0xFF323232),
+    Color(0xFF353535),
+    Color(0xFF373737)
+  ],
+};
 
 bool wait = false;
 
@@ -69,12 +100,12 @@ final boxDecoration = BoxDecoration(
         topRight: Radius.elliptical(300, 140),
         bottomLeft: Radius.circular(40),
         bottomRight: Radius.circular(40)),
-    color: Colors.black,
+    color: customColorScheme.surface,
     boxShadow: [
       BoxShadow(
-        color: Colors.pink.shade200,
-        blurRadius: 10,
-        offset: Offset(5, 8),
+        color: Colors.black54,
+        blurRadius: 5,
+        offset: Offset(4, 4),
         spreadRadius: 1,
       )
     ]);

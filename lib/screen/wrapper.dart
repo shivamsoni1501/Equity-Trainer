@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/models/user.dart';
-import 'package:hello_world/screen/authenticate/auth.dart';
-import 'package:hello_world/screen/home/home.dart';
-import 'package:hello_world/services/database.dart';
+import '../models/user.dart';
+import '../screen/authenticate/auth.dart';
+import '../screen/home/home.dart';
+import '../services/database.dart';
 import 'package:provider/provider.dart';
 
 class Wrapper extends StatefulWidget {

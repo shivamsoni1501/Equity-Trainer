@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hello_world/screen/wrapper.dart';
-import 'package:hello_world/services/authentication.dart';
+import './models/constants.dart';
+import './screen/wrapper.dart';
+import './services/authentication.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -18,15 +19,53 @@ class MyApp extends StatelessWidget {
       value: AuthenticationService().user,
       child: MaterialApp(
         title: 'Equity Trainer',
+        themeMode: ThemeMode.dark,
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          colorScheme: customColorScheme,
           textTheme: TextTheme(
+            headline1: TextStyle(
+              fontSize: 25,
+              color: Colors.pink,
+              fontWeight: FontWeight.w900,
+              textBaseline: TextBaseline.alphabetic,
+              decoration: TextDecoration.none,
+            ),
+            headline2: TextStyle(
+              fontSize: 20,
+              color: Colors.pink.shade700,
+              fontWeight: FontWeight.bold,
+              textBaseline: TextBaseline.alphabetic,
+              decoration: TextDecoration.none,
+            ),
             headline3: TextStyle(
-                fontSize: 30,
-                color: Colors.pink,
-                fontWeight: FontWeight.bold,
-                textBaseline: TextBaseline.alphabetic,
-                decoration: TextDecoration.none),
+              fontSize: 18,
+              color: Colors.pink.shade700,
+              fontWeight: FontWeight.bold,
+              textBaseline: TextBaseline.alphabetic,
+              decoration: TextDecoration.none,
+            ),
+            headline4: TextStyle(
+              fontSize: 16,
+              color: Colors.white60,
+              fontWeight: FontWeight.bold,
+              textBaseline: TextBaseline.alphabetic,
+              decoration: TextDecoration.none,
+            ),
+            headline5: TextStyle(
+              fontSize: 14,
+              color: Colors.white54,
+              fontWeight: FontWeight.bold,
+              textBaseline: TextBaseline.alphabetic,
+              decoration: TextDecoration.none,
+            ),
+            headline6: TextStyle(
+              fontSize: 12,
+              color: Colors.white30,
+              fontWeight: FontWeight.bold,
+              textBaseline: TextBaseline.alphabetic,
+              decoration: TextDecoration.none,
+            ),
           ),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
