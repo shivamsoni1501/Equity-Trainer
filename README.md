@@ -70,7 +70,7 @@ and, to see the Transaction History screen user can click on the History button
 
 ### TransactionHistory Screen
 <p align="center">
-  <img src="./images/history.jpg" alt="History Screen" width="200" >
+  <img src="./images/dark_history.jpg" alt="History Screen" width="200" >
 </p>
 
 
