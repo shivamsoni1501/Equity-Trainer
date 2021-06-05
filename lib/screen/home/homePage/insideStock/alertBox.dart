@@ -151,13 +151,15 @@ class _AlertBoxState extends State<AlertBox> {
                       LocalUser.tocken += total;
                       LocalUser.stocks[stockId]['count'] -= val;
                       LocalUser.stocks[stockId]['totalSell'] += total;
-                      LocalUser.history.add({
+                      var item = {
                         'stockId': stockId,
                         'time': DateTime.now().toString(),
                         'price': price.toString(),
                         'isSell': true.toString(),
                         'count': val.toString()
-                      });
+                      };
+                      LocalUser.history.add(item);
+                      LocalUser.stocksHistory[stockId].add(item);
 
                       try {
                         //trying to update ServerData
@@ -170,6 +172,7 @@ class _AlertBoxState extends State<AlertBox> {
                         LocalUser.stocks[stockId]['count'] += val;
                         LocalUser.stocks[stockId]['totalSell'] -= total;
                         LocalUser.history.removeLast();
+                        LocalUser.stocksHistory[stockId].removeLast();
                         error = 'Network Error!\ncheck your connection';
                       }
                     } catch (e) {
@@ -196,13 +199,15 @@ class _AlertBoxState extends State<AlertBox> {
                       LocalUser.tocken -= total;
                       LocalUser.stocks[stockId]['count'] += val;
                       LocalUser.stocks[stockId]['totalBuy'] += total;
-                      LocalUser.history.add({
+                      var item = {
                         'stockId': stockId,
                         'time': DateTime.now().toString(),
                         'price': price.toString(),
                         'isSell': false.toString(),
                         'count': val.toString(),
-                      });
+                      };
+                      LocalUser.history.add(item);
+                      LocalUser.stocksHistory[stockId].add(item);
                       try {
                         //trying to update serverData
                         await DatabaseService().updateDatabase();
@@ -214,6 +219,7 @@ class _AlertBoxState extends State<AlertBox> {
                         LocalUser.stocks[stockId]['count'] -= val;
                         LocalUser.stocks[stockId]['totalBuy'] -= total;
                         LocalUser.history.removeLast();
+                        LocalUser.stocksHistory[stockId].removeLast();
                         error = 'Network Error!\ncheck your connection';
                       }
                     }

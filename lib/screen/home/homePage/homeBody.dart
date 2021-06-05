@@ -12,43 +12,49 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  fetchData() async {
+  Future fetchData() async {
     quoteRaw = await FinanceQuote.getRawData(
         quoteProvider: QuoteProvider.yahoo, symbols: LocalUser.stockList);
+    setState(() {});
     return quoteRaw;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: FutureBuilder(
-        future: (quoteRaw == null) ? fetchData() : null,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
-            return Center(child: CircularProgressIndicator());
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              quoteRaw = snapshot.data;
-            } else {
-              return Center(
-                  child: Text(
-                'Network Error!\nCheck your internet connection.',
-                style: TextStyle(color: Colors.redAccent),
-                textAlign: TextAlign.center,
-              ));
+    return RefreshIndicator(
+      backgroundColor: customColorScheme.primary,
+      color: Colors.pink.shade700,
+      onRefresh: fetchData,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 5),
+        child: FutureBuilder(
+          future: (quoteRaw == null) ? fetchData() : null,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting)
+              return Center(child: CircularProgressIndicator());
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasData) {
+                quoteRaw = snapshot.data;
+              } else {
+                return Center(
+                    child: Text(
+                  'Network Error!\nCheck your internet connection.',
+                  style: TextStyle(color: Colors.redAccent),
+                  textAlign: TextAlign.center,
+                ));
+              }
             }
-          }
-          LocalUser.load = false;
-          return GridView.count(
-            mainAxisSpacing: 5,
-            crossAxisCount: 2,
-            physics: BouncingScrollPhysics(),
-            children: LocalUser.stockList
-                .map((value) => StockTile(stockId: value))
-                .toList(),
-          );
-        },
+            LocalUser.load = false;
+            return GridView.count(
+              mainAxisSpacing: 5,
+              crossAxisCount: 2,
+              physics: BouncingScrollPhysics(),
+              children: LocalUser.stockList
+                  .map((value) => StockTile(stockId: value))
+                  .toList(),
+            );
+          },
+        ),
       ),
     );
   }

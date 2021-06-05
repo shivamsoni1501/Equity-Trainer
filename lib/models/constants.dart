@@ -103,10 +103,10 @@ final boxDecoration = BoxDecoration(
     color: customColorScheme.surface,
     boxShadow: [
       BoxShadow(
-        color: Colors.black54,
+        color: Colors.black38,
         blurRadius: 5,
         offset: Offset(4, 4),
-        spreadRadius: 1,
+        spreadRadius: 0,
       )
     ]);
 

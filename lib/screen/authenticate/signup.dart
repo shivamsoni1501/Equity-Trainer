@@ -32,16 +32,16 @@ class _SignUpState extends State<SignUp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
+        backgroundColor: customColorScheme.primary,
         centerTitle: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
         ),
-        shadowColor: Colors.pink,
+        shadowColor: Colors.black,
         elevation: 20,
         title: Text(
           "EQUITY TRAINER",
-          style: TextStyle(color: Colors.pink),
+          style: Theme.of(context).textTheme.headline1,
         ),
         actions: [
           IconButton(
@@ -51,10 +51,12 @@ class _SignUpState extends State<SignUp> {
             icon: Icon(
               Icons.login,
               color: Colors.pink,
+              size: 30,
             ),
           )
         ],
       ),
+      backgroundColor: customColorScheme.background,
       body: Center(
         child: SingleChildScrollView(
           child: Container(
@@ -65,7 +67,20 @@ class _SignUpState extends State<SignUp> {
               key: _formKey,
               child: Column(
                 children: [
-                  icon(Icons.person_add_alt_1),
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: customColorScheme.primaryVariant,
+                    foregroundColor: Colors.pink,
+                    child: Icon(
+                      Icons.person_add_alt_1,
+                      size: 50,
+                    ),
+                  ),
+                  Divider(
+                    height: 30,
+                    thickness: 2,
+                    color: Colors.grey.shade600,
+                  ),
                   TextFormField(
                     focusNode: nameNode,
                     onFieldSubmitted: (val) {

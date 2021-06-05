@@ -197,10 +197,15 @@ class StockTile extends StatelessWidget {
   }
 }
 
-class TranHistory extends StatelessWidget {
+class TranHistory extends StatefulWidget {
   final String stockId;
   const TranHistory({Key key, this.stockId}) : super(key: key);
 
+  @override
+  _TranHistoryState createState() => _TranHistoryState();
+}
+
+class _TranHistoryState extends State<TranHistory> {
   getItems(String a1, String a2, BuildContext context) {
     return Expanded(
       child: Container(
@@ -227,8 +232,8 @@ class TranHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    dynamic value = quoteRaw[stockId];
-    final int historyL = LocalUser.stocksHistory[stockId].length;
+    dynamic value = quoteRaw[widget.stockId];
+    final int historyL = LocalUser.stocksHistory[widget.stockId].length;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -237,7 +242,7 @@ class TranHistory extends StatelessWidget {
             onPressed: () => Navigator.pop(context)),
         backgroundColor: customColorScheme.primary,
         title: Hero(
-          tag: stockId + '0',
+          tag: widget.stockId + '0',
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -251,7 +256,7 @@ class TranHistory extends StatelessWidget {
               //   ),
               // ),
               Text(
-                stockId,
+                widget.stockId,
                 style: Theme.of(context).textTheme.headline1,
                 textAlign: TextAlign.center,
               ),
@@ -296,13 +301,13 @@ class TranHistory extends StatelessWidget {
               children: [
                 getItems(
                     'Total Investment',
-                    LocalUser.stocks[stockId]['totalBuy']
+                    LocalUser.stocks[widget.stockId]['totalBuy']
                         .floorToDouble()
                         .toString(),
                     context),
                 getItems(
                     'Total Earn',
-                    LocalUser.stocks[stockId]['totalSell']
+                    LocalUser.stocks[widget.stockId]['totalSell']
                         .floorToDouble()
                         .toString(),
                     context)
@@ -312,7 +317,9 @@ class TranHistory extends StatelessWidget {
               children: [
                 getItems(
                     'number of owned stocks',
-                    LocalUser.stocks[stockId]['count'].toInt().toString(),
+                    LocalUser.stocks[widget.stockId]['count']
+                        .toInt()
+                        .toString(),
                     context),
                 getItems('Market Volume',
                     value['regularMarketVolume'].toString(), context)
@@ -321,9 +328,13 @@ class TranHistory extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => StockDetails(stockId: stockId)));
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                StockDetails(stockId: widget.stockId)))
+                    .then((value) {
+                  setState(() {});
+                });
               },
               child: Text(
                 'See More details',
@@ -345,7 +356,7 @@ class TranHistory extends StatelessWidget {
                 child: ListView.builder(
                   itemCount: historyL,
                   itemBuilder: (context, index) => HTile(
-                    hData: LocalUser.stocksHistory[stockId]
+                    hData: LocalUser.stocksHistory[widget.stockId]
                         [historyL - index - 1],
                   ),
                 ),
